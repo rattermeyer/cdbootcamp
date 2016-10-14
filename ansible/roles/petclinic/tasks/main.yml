@@ -1,0 +1,22 @@
+---
+# tasks file for petclinic
+- name: "ensure dockerfile directory exists"
+  file:
+    path: "/srv/dockerfiles/spring-petclinic"
+    state: directory
+- name: "copy dockerfile"
+  copy:
+    src: "{{role_path}}/files/Dockerfile"
+    dest: "/srv/dockerfiles/spring-petclinic"
+- name: "build petclinic image"
+  docker_image:
+    path: "/srv/dockerfiles/spring-petclinic"
+    name: "spring-petclinic"
+
+- name: "run spring-petclinic"
+  docker_container:
+    recreate: true
+    name: "spring-petclinic"
+    image: "spring-petclinic"
+    env:
+      JAVA_OPTS: "-Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.jdbc.Driver -Djdbc.url=jdbc:mysql://localhost:3306/petclinic?useUnicode=true -Djdbc.username=root -Djdbc.password=petclinic"

@@ -1,0 +1,18 @@
+- hosts: database
+  tasks:
+  - name: "ensure mysql data directory exists"
+    file:
+      path: "/data/mysql"
+      state: directory 
+  - name: "install mysql"
+    docker_container:
+      name: "mysql"
+      image: "mysql:5.7.15"
+      ports:
+        - "3306:3306"
+      volumes:
+        - "/data/mysql:/var/lib/mysql"
+      env:
+        MYSQL_ROOT_PASSWORD: petclinic
+        MYSQL_DATABASE: petclinic
+

@@ -1,0 +1,4 @@
+---
+- hosts: dh1
+  roles:
+  - petclinic
