@@ -1,0 +1,9 @@
+---
+- hosts: dockerhosts
+  pre_tasks:
+    - name: "install aufs"
+      apt: 
+        name: aufs-tools
+  roles:
+    - role: rattermeyer.docker
+      docker_group_members: vagrant

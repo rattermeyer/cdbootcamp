@@ -1,0 +1,10 @@
+---
+- hosts: all
+  strategy: free
+  tasks:
+  - name: "install gcc"
+    apt: name=gcc
+  - name: "install apt-spy2 to speed up apt installation"
+    gem: name=apt-spy2 state=present user_install=no
+  - name: "select fast mirror"
+    command: "apt-spy2 fix --commit --launchpad --country=Germany && apt update"
