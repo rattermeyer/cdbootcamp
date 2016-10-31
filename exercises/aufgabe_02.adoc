@@ -1,0 +1,60 @@
+= Aufgabe 1: Vagrant
+
+Aufgabe ist es 4 Maschinen mittels eines Vagrantfiles zu beschreiben und zu
+starten. Diese Maschinen dienen als Grundlage für die weiteren Aufgaben.
+
+== Spezifikation
+Wir benötigen 3 Maschinen als Dockerhost
+Die Basis-IP / Subnetz ist 192.168.56
+
+[options="header"]
+|===================
+|Name|IP|Memory|CPU
+|dh1|.21|2560|1
+|dh2|.22|2560|1
+|dh3|.22|2560|1
+|bccontroller|.10|512|1
+|===================
+
+Als Vagrant Base Box soll `ffuenf/ubuntu-16.04-server-amd64` verwendet werden.
+Aktuell hat die offizielle `ubuntu/xenial64` ein paar Probleme.
+
+Die letzte Maschine wird benötigt, um von dort aus ansible zu steuern.
+Dies ist notwendig, da der Ansible Controller nur unter Linux läuft.
+Daher ist es notwendig dort ansible zu installieren (Provisionieren über Vagrant).
+
+Wer direkt unter Linux arbeitet, braucht diese VM nicht zu erzeugen.
+
+Wie ihr seht, brauchen wir also für die Übung aktuell ca. 8 GB Speicher für die VMs.
+Dies bedeutet, ihr solltet einen Laptop / PC mit 16GB haben.
+
+== Hinweise
+
+Startet erst einmal mit dem bccontroller.
+Erstellt ein Shell Skript, welches ansible installiert.
+Schaut euch dazu die offfizielle
+link:http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-apt-ubuntu[Ansible Dokumentation] an.
+Legt das Skript in einem Unterordner `scripts` ab.
+
+Macht erst weiter, wenn ihr die Fragen (s.u.) auch schon für den bccontroller
+beantworten könnt. Je nachdem wie ihr an die Provisionierung herangegangen seid,
+kann auch alles in Ordnung sein.
+
+Ok, BC Controller ist oben und läuft.
+
+Alle anderen Maschinen müssen ja nach dem gleichen Muster provisioniert werden.
+Dazu gibt es verschiedene Pattern. Je nachdem, ob ihr Ruby sprecht oder nicht,
+werden euch dazu Möglichkeiten einfallen (probiert es aus).
+
+Oder ihr könnt dies link:https://github.com/rattermeyer/vagrant-swarm/blob/master/Vagrantfile[Vagrantfile] mal anschauen.
+
+== Fragen
+
+* Was passiert, wenn ihr einen schon provisionierten bccontroller nochmal provisioniert?
+* Welche (Konfigurations)-Dateien ändert ihr im Rahmen der Provisionierung?
+* Werden bei jeder Neuprovisionieren neue Zeilen in die Dateien geschrieben?
+* Wie könnt ihr das verhindern?
+
+== Lösung
+
+Eine mögliche Lösung findet ihr unter dem Tag "solution_1".
