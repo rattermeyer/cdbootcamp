@@ -1,0 +1,5 @@
+---
+- hosts: all
+  roles:
+  - role: PeterMosmans.virtualbox-guest
+    virtualbox_version: 5.1.8

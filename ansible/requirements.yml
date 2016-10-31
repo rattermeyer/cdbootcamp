@@ -1,2 +1,4 @@
 - src: rattermeyer.docker
   version: v0.1
+- src: PeterMosmans.virtualbox-guest
+  version: v1.3
