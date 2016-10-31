@@ -11,7 +11,8 @@ RUN mkdir /opt/aspectj && cd /opt/aspectj &&\
 # ADD ./setenv.sh /tomcat/bin/setenv.sh
 
 # Pull petclinic
-RUN git clone https://github.com/stagemonitor/spring-petclinic.git /spring-petclinic
+RUN git clone https://github.com/stagemonitor/spring-petclinic.git /spring-petclinic && \
+  sed -i -e 's/<!--dependency/<dependency/g' -e 's/cy-->/cy>/g' /spring-petclinic/pom.xml
 
 # Build petclinic
 WORKDIR /spring-petclinic
@@ -19,7 +20,7 @@ WORKDIR /spring-petclinic
 
 #ADD ./stagemonitor.properties /spring-petclinic/src/main/resources/stagemonitor.properties
 
-RUN mvn package &&\
+RUN mvn -P mysql package &&\
     mv /spring-petclinic/target/petclinic.war /usr/local/tomcat/webapps/petclinic.war &&\
     rm -rf /spring-petclinic
 
