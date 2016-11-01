@@ -25,6 +25,7 @@ Vagrant.configure(2) do |config|
    config.vm.define machine_name do |machine_config|
      machine_ip = machine_details[:ip]
      ui.info("Handling vm with hostname [#{machine_name.to_s}] and IP [#{machine_ip}]")
+     machine_config.vm.box_check_update = false
      machine_config.vm.box = machine_details[:box]
      machine_config.vm.network :private_network, ip: machine_ip
      machine_config.vm.hostname = machine_name.to_s
@@ -44,6 +45,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "bccontroller", autostart: true do |vm_config|
     vm_config.vm.box = "ffuenf/ubuntu-16.04-server-amd64"
+    vm_config.vm.box_check_update = false
     vm_config.vm.hostname = "bccontroller"
     vm_config.vm.network :private_network, ip: "192.168.56.10"
     vm_config.vm.provider :virtualbox do |vb|

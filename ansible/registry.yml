@@ -1,0 +1,21 @@
+---
+- hosts: dockerregistry
+  tasks:
+  - name: "start registry"
+    docker_container:
+      name: registry
+      recreate: true
+      image: registry:2.5.1
+      ports:
+      - "5000:5000"
+      volumes:
+      - "/srv/registry/data:/var/lib/registry"
+  - name: "start docker registry frontend"
+    docker_container:
+      name: registry-frontend
+      image: konradkleine/docker-registry-frontend:v2
+      ports:
+      - "15000:80"
+      env:
+        ENV_DOCKER_REGISTRY_HOST: "{{ansible_ssh_host}}"
+        ENV_DOCKER_REGISTRY_PORT: 5000

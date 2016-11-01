@@ -4,19 +4,23 @@
   file:
     path: "/srv/dockerfiles/spring-petclinic"
     state: directory
+
 - name: "copy dockerfile"
   copy:
     src: "{{role_path}}/files/Dockerfile"
     dest: "/srv/dockerfiles/spring-petclinic"
+
 - name: "build petclinic image"
   docker_image:
     path: "/srv/dockerfiles/spring-petclinic"
-    name: "spring-petclinic"
+    name: "192.168.56.22:5000/spring-petclinic"
+    tag: latest
 
 - name: "run spring-petclinic"
   docker_container:
     recreate: true
     name: "spring-petclinic"
-    image: "spring-petclinic"
+    image: "192.168.56.22:5000/spring-petclinic"
+    docker_host: "tcp://192.168.56.23:2375"
     env:
-      JAVA_OPTS: "-Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.jdbc.Driver -Djdbc.url=jdbc:mysql://localhost:3306/petclinic?useUnicode=true -Djdbc.username=root -Djdbc.password=petclinic"
+      JAVA_OPTS: "-Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.jdbc.Driver -Djdbc.url=jdbc:mysql://192.168.56.21:3306/petclinic?useUnicode=true -Djdbc.username=root -Djdbc.password=petclinic"

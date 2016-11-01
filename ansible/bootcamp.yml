@@ -1,3 +1,6 @@
 ---
+- include: fix-mirror.yml
+- include: vbox-guest.yml
 - include: docker.yml
+- include: registry.yml
 - include: database.yml

@@ -1,9 +1,12 @@
 - hosts: dockerhosts
   pre_tasks:
     - name: "install aufs"
-      apt: 
+      apt:
         name: aufs-tools
   roles:
     - role: rattermeyer.docker
       docker_group_members: vagrant
-      pip_version_docker_py: "1.7.0"
+      docker_opts: >
+        -H unix://
+        -H tcp://0.0.0.0:2375
+        --insecure-registry 192.168.56.22:5000
