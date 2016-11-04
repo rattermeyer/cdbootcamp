@@ -1,60 +1,44 @@
 = Aufgabe 3: Dockerfiles + Provisioning
 
-Aufgabe ist es 4 Maschinen mittels eines Vagrantfiles zu beschreiben und zu
-starten. Diese Maschinen dienen als Grundlage für die weiteren Aufgaben.
+In dieser Aufgabe soll zum einen ein vodefiniertes MYSQL Image deployed werden.
+Zum anderen soll ein Dockerfile für die Spring Petclinic erstellt, getestet und
+dann ebenefalls deployed werden, welches die MySQL benutzt.
+
+Damit wir das Docker Image von allen Hosts später zugreifen können,
+deployen wir noch eine Docker Registry und pushen das Image dort hinein.
 
 == Spezifikation
-Wir benötigen 3 Maschinen als Dockerhost
-Die Basis-IP / Subnetz ist 192.168.56
 
-[options="header"]
-|===================
-|Name|IP|Memory|CPU
-|dh1|.21|2560|1
-|dh2|.22|2560|1
-|dh3|.22|2560|1
-|bccontroller|.10|512|1
-|===================
+Erstellt ein Playbook `registry.yml`, welches die offizielle registry (version 2) deployed.
+Dies machen wir auf dh2.
 
-Als Vagrant Base Box soll `ffuenf/ubuntu-16.04-server-amd64` verwendet werden.
-Aktuell hat die offizielle `ubuntu/xenial64` ein paar Probleme.
+Passt euer Playbook an, welches docker verteilt. Die Docker Options müssen so angepasst werden, dass
+dh2 als insecure registry zugelassen ist (auf allen hosts).
+Versucht jetzt auf dh1 ein kleines Image zu pullen (etwa alpine), so zu taggen, dass ihr es in eure eigene registry pushen könnt.
+Und pusht es dann.
 
-Die letzte Maschine wird benötigt, um von dort aus ansible zu steuern.
-Dies ist notwendig, da der Ansible Controller nur unter Linux läuft.
-Daher ist es notwendig dort ansible zu installieren (Provisionieren über Vagrant).
+Erstellt ein Playbook `database.yml`, welches MySQL in der Version 5.7.15 installiert.
+Nutzt dazu das offizielle MYSQL Image.
 
-Wer direkt unter Linux arbeitet, braucht diese VM nicht zu erzeugen.
+Die MySQL Datenbank sollte auf dem dh1 deployed werden.
+Die Daten sollten sich auf dem Host befinden, so dass sie auch nach dem
+Deployment einer neuen MySQL Version erhalten bleiben.
 
-Wie ihr seht, brauchen wir also für die Übung aktuell ca. 8 GB Speicher für die VMs.
-Dies bedeutet, ihr solltet einen Laptop / PC mit 16GB haben.
+Die spring petclinic findet ihr unter `https://github.com/spring-projects/spring-petclinic`.
+Erstellt eine Rolle `petclinic`. Legt das Dockerfile im Unververzeichnis `files` ab.
+Nutzt als Base Image das offizielle `maven:3.3.9-jdk-8` Image.
+
+Automatisiert bauen und deployment des Petclinic Containers mittels ansible und deployed den Container ebenfalls auf dh1.
 
 == Hinweise
-
-Startet erst einmal mit dem bccontroller.
-Erstellt ein Shell Skript, welches ansible installiert.
-Schaut euch dazu die offfizielle
-link:http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-apt-ubuntu[Ansible Dokumentation] an.
-Legt das Skript in einem Unterordner `scripts` ab.
-
-Macht erst weiter, wenn ihr die Fragen (s.u.) auch schon für den bccontroller
-beantworten könnt. Je nachdem wie ihr an die Provisionierung herangegangen seid,
-kann auch alles in Ordnung sein.
-
-Ok, BC Controller ist oben und läuft.
-
-Alle anderen Maschinen müssen ja nach dem gleichen Muster provisioniert werden.
-Dazu gibt es verschiedene Pattern. Je nachdem, ob ihr Ruby sprecht oder nicht,
-werden euch dazu Möglichkeiten einfallen (probiert es aus).
-
-Oder ihr könnt dies link:https://github.com/rattermeyer/vagrant-swarm/blob/master/Vagrantfile[Vagrantfile] mal anschauen.
+Überlegt, wie ihr den MySQL Container aus dem Petclinic container "ansprechen" könnt.
+Es gibt mehrere Möglichkeiten, die teilweise aber auch Einschränkungen haben.
+Tauscht euch über die Lösungsmöglichkeiten aus.
 
 == Fragen
-
-* Was passiert, wenn ihr einen schon provisionierten bccontroller nochmal provisioniert?
-* Welche (Konfigurations)-Dateien ändert ihr im Rahmen der Provisionierung?
-* Werden bei jeder Neuprovisionieren neue Zeilen in die Dateien geschrieben?
-* Wie könnt ihr das verhindern?
+Könnt ihr den Petclinic Container auch auf `dh2` ausrollen? Probiert es aus.
+Diskutiert, welche Optionen es gibt dieses Problem zu lösen.
 
 == Lösung
 
-Eine mögliche Lösung findet ihr unter dem Tag "solution_1".
+Eine mögliche Lösung findet ihr unter dem Branch "solution_03".

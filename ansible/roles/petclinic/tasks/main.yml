@@ -15,12 +15,17 @@
     path: "/srv/dockerfiles/spring-petclinic"
     name: "192.168.56.22:5000/spring-petclinic"
     tag: latest
+    push: true
 
 - name: "run spring-petclinic"
   docker_container:
     recreate: true
     name: "spring-petclinic"
     image: "192.168.56.22:5000/spring-petclinic"
-    docker_host: "tcp://192.168.56.23:2375"
+    docker_host: "tcp://192.168.56.21:2375"
+    ports:
+    - "9966:9966"
+    etc_hosts:
+      mysql: "192.168.56.21"
     env:
       JAVA_OPTS: "-Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.jdbc.Driver -Djdbc.url=jdbc:mysql://192.168.56.21:3306/petclinic?useUnicode=true -Djdbc.username=root -Djdbc.password=petclinic"

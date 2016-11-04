@@ -1,6 +1,6 @@
-FROM openjdk:8
+FROM maven:3.3.9-jdk-8
 
-RUN apt-get update && apt-get install -y wget git-core maven
+RUN apt-get install --no-install-recommends -y git-core
 
 # Pull petclinic
 RUN git clone https://github.com/spring-projects/spring-petclinic /spring-petclinic
@@ -8,7 +8,7 @@ RUN git clone https://github.com/spring-projects/spring-petclinic /spring-petcli
 # Build petclinic
 WORKDIR /spring-petclinic
 
-RUN mvn -P MySQL -DskipTests=true package
+RUN mvn -P MySQL -DskipTests=true package && mvn dependency:go-offline
 
 CMD mvn tomcat7:run -PMySQL -Djpa.database=MYSQL \
   -Djdbc.driverClassName=com.mysql.jdbc.Driver \
